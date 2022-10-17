@@ -1,0 +1,46 @@
+import mongoose from "mongoose";
+
+const bet = {
+    uid: { type: String, required: true },
+    name: { type: String, required: true },
+
+    odd: { type: Number, default: 0 },
+    even: { type: Number, default: 0 },
+    fan1: { type: Number, default: 0 },
+    fan2: { type: Number, default: 0 },
+    fan3: { type: Number, default: 0 },
+    fan4: { type: Number, default: 0 },
+    kwok12: { type: Number, default: 0 },
+    kwok23: { type: Number, default: 0 },
+    kwok34: { type: Number, default: 0 },
+    kwok41: { type: Number, default: 0 },
+    chun123: { type: Number, default: 0 },
+    chun124: { type: Number, default: 0 },
+    chun134: { type: Number, default: 0 },
+    chun234: { type: Number, default: 0 },
+
+    betwin: { type: Number, default: 0 },
+    time: { type: Date },
+    odds: { type: Object },
+
+    siteId: { type: String },
+    freeBet: { type: Boolean, default: false },
+
+    playerId: { type: Number },
+    operatorId: { type: String, required: false },
+    roundId: { type: Number, default: 0 },
+    paid: { type: Boolean, default: false },
+};
+
+const bets = mongoose.model(
+    "FanTan_bet",
+    new mongoose.Schema({
+        ...bet,
+        currency: { type: String, require: true },
+        rate: { type: Number, require: true },
+        partnerId: { type: String, require: true },
+    })
+);
+const tmpBets = mongoose.model("FanTan_tmpBet", new mongoose.Schema(bet));
+
+export { bets as Bets, tmpBets as TmpBets };
