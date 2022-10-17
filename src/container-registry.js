@@ -1,7 +1,7 @@
 import awilix from "awilix";
 import { Table } from "sc-game-base";
 
-import FanTanPlaceBetConsumer from "./consumers/place-bet-consumer";
+import FanTanPlaceBetConsumer from "./consumers/fan-tan-place-bet-consumer";
 import { Bot, GameCron } from "./crons";
 import { Bets, Rounds, TmpBets, Results } from "./models";
 

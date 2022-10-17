@@ -1,7 +1,7 @@
 import { helpers } from "sc-common";
-import FanTanPlaceBetConsumer from "sc-game-base/src/core/event-consumers/place-bet-consumer";
+import PlaceBetConsumer from "sc-game-base/src/core/event-consumers/place-bet-consumer";
 
-export default class FanTanFanTanPlaceBetConsumer extends FanTanPlaceBetConsumer {
+export default class FanTanPlaceBetConsumer extends PlaceBetConsumer {
     composeBettingTimeValidationCriteria(roundId) {
         const configs = this.gameData.gameConfigs;
         const shakeThePlateTime = this.definition.durations.placingBets + this.definition.durations.shakeThePlateDuration;
