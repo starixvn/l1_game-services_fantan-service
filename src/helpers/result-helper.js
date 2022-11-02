@@ -52,28 +52,30 @@ export const generateResult = (randomMode) => {
 
     const chance = new Chance();
     const randomFunction = chance.pickone(randomFunctions);
+    const totalBeads = randomFunction(Constants.numberOfBeads.min, Constants.numberOfBeads.max);
+    const finalBeads = totalBeads % 4 > 0 ? totalBeads % 4 : 4;
 
-    return randomFunction(Constants.numberOfBeads.min, Constants.numberOfBeads.max);
+    return { totalBeads, finalBeads };
 };
 
 export const getSettlementResult = (roundResult) => {
-    const finalResult = roundResult % 4;
+    const { finalBeads } = roundResult;
 
     return {
-        even: finalResult % 2 === 0,
-        odd: finalResult % 2 === 1,
-        fan1: finalResult === 1,
-        fan2: finalResult === 2,
-        fan3: finalResult === 3,
-        fan4: finalResult === 0,
-        kwok12: [1, 2].includes(finalResult),
-        kwok23: [2, 3].includes(finalResult),
-        kwok34: [3, 0].includes(finalResult),
-        kwok41: [1, 0].includes(finalResult),
-        chun123: [1, 2, 3].includes(finalResult),
-        chun124: [1, 2, 0].includes(finalResult),
-        chun134: [1, 3, 0].includes(finalResult),
-        chun234: [2, 3, 0].includes(finalResult),
+        even: finalBeads % 2 === 0,
+        odd: finalBeads % 2 === 1,
+        fan1: finalBeads === 1,
+        fan2: finalBeads === 2,
+        fan3: finalBeads === 3,
+        fan4: finalBeads === 4,
+        kwok12: [1, 2].includes(finalBeads),
+        kwok23: [2, 3].includes(finalBeads),
+        kwok34: [3, 4].includes(finalBeads),
+        kwok41: [1, 4].includes(finalBeads),
+        chun123: [1, 2, 3].includes(finalBeads),
+        chun124: [1, 2, 4].includes(finalBeads),
+        chun134: [1, 3, 4].includes(finalBeads),
+        chun234: [2, 3, 4].includes(finalBeads),
     };
 };
 

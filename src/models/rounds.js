@@ -22,9 +22,14 @@ const settlementResultSchema = new mongoose.Schema(
     { _id: false }
 );
 
+const resultSchema = new mongoose.Schema({
+    totalBeads: { type: Number, required: true },
+    finalBeads: { type: Number, required: true },
+});
+
 const Schema = new mongoose.Schema({
     id: { type: Number, required: true },
-    result: { type: Number, required: true },
+    result: resultSchema,
     settlementResult: settlementResultSchema,
     time: { type: Date, default: new Date() },
     exchangeRateId: { type: Number, require: true },
