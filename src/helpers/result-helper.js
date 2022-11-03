@@ -79,4 +79,4 @@ export const getSettlementResult = (roundResult) => {
     };
 };
 
-export const generateRawResultForHash = (roundResult) => `{${roundResult}}`;
+export const generateRawResultForHash = (roundResult) => `{${roundResult.totalBeads}}`;

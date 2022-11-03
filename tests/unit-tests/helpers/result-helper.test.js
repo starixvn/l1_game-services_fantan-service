@@ -119,6 +119,26 @@ describe("getSettlementResult tests", () => {
 });
 
 describe("generateResult tests", () => {
+    const chanceMock = { pickoneIndex: 0 };
+
+    jest.mock("chance", () => {
+        return function () {
+            const original = {
+                ...jest.requireActual("chance"),
+            };
+
+            return {
+                natural: (opt) => {
+                    return new original.Chance().natural(opt);
+                },
+                integer: (opt) => {
+                    return new original.Chance().integer(opt);
+                },
+                pickone: (arr) => arr[chanceMock.pickoneIndex],
+            };
+        };
+    });
+
     describe("when not passing mode", () => {
         it("should return result includes totalBeads ", () => {
             // Act
@@ -188,36 +208,53 @@ describe("generateResult tests", () => {
     });
 
     describe("when passing a valid mode", () => {
-        it("should return result includes totalBeads ", () => {
-            // Act
-            const result = generateResult();
+        const testCases = [
+            { randomMode: 1, pickoneIndex: 0 },
+            { randomMode: 1, pickoneIndex: 1 },
+            { randomMode: 1, pickoneIndex: 2 },
+            { randomMode: 1, pickoneIndex: 3 },
+            { randomMode: 1, pickoneIndex: 4 },
+            { randomMode: 2, pickoneIndex: 0 },
+            { randomMode: 3, pickoneIndex: 0 },
+            { randomMode: 3, pickoneIndex: 1 },
+        ];
 
-            // Assert
-            expect(Object.keys(result).includes("totalBeads"));
-        });
+        testCases.forEach(({ randomMode, pickoneIndex }) => {
+            describe(`when randomMode is ${randomMode} and random func index is ${pickoneIndex}`, () => {
+                chanceMock.pickoneIndex = pickoneIndex;
 
-        it("should return result includes finalBeads ", () => {
-            // Act
-            const result = generateResult();
+                it("should return result includes totalBeads ", () => {
+                    // Act
+                    const result = generateResult(randomMode);
 
-            // Assert
-            expect(Object.keys(result).includes("finalBeads"));
-        });
+                    // Assert
+                    expect(Object.keys(result).includes("totalBeads"));
+                });
 
-        it("should return total beads in range 29-40", () => {
-            // Act
-            const { totalBeads } = generateResult();
+                it("should return result includes finalBeads ", () => {
+                    // Act
+                    const result = generateResult(randomMode);
 
-            // Assert
-            expect(totalBeads >= 29 && totalBeads <= 40).toBeTruthy();
-        });
+                    // Assert
+                    expect(Object.keys(result).includes("finalBeads"));
+                });
 
-        it("should return final beads in range 1-4", () => {
-            // Act
-            const { finalBeads } = generateResult();
+                it("should return total beads in range 29-40", () => {
+                    // Act
+                    const { totalBeads } = generateResult(randomMode);
 
-            // Assert
-            expect(finalBeads >= 1 && finalBeads <= 4).toBeTruthy();
+                    // Assert
+                    expect(totalBeads >= 29 && totalBeads <= 40).toBeTruthy();
+                });
+
+                it("should return final beads in range 1-4", () => {
+                    // Act
+                    const { finalBeads } = generateResult(randomMode);
+
+                    // Assert
+                    expect(finalBeads >= 1 && finalBeads <= 4).toBeTruthy();
+                });
+            });
         });
     });
 });
@@ -225,7 +262,7 @@ describe("generateResult tests", () => {
 describe("generateRawResultForHash", () => {
     it("should format result in unicode", () => {
         // Arrange
-        const roundResult = 34;
+        const roundResult = { totalBeads: 34 };
 
         // Act
         const result = generateRawResultForHash(roundResult);
