@@ -1,9 +1,9 @@
 export default {
-    id: 59,
+    id: 60,
     name: "FanTan",
     configName: "fantan",
     durations: {
-        wholeRound: 48,
+        wholeRound: 50,
         placingBets: 30,
         lockingBet: 5,
         shakeThePlateDuration: 5,
