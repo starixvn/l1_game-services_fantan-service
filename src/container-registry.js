@@ -1,5 +1,5 @@
 import awilix from "awilix";
-import { Table } from "sc-game-base";
+import { Table, Core } from "sc-game-base";
 import { RebetContainerRegistry } from "sc-rebet-mode";
 import FanTanPlaceBetConsumer from "./consumers/fan-tan-place-bet-consumer";
 import { Bot, GameCron } from "./crons";
@@ -11,9 +11,7 @@ export default class ContainerRegistry extends Table.TableContainerRegistry {
     register(appConfigs, definition, gameData) {
         super.register(appConfigs, definition, gameData);
 
-        this.container.register(
-            new RebetContainerRegistry().registerTableGame(Table.Routers.TableHttpRouter, Table.Crons.TableProcessBetQueue)
-        );
+        this.container.register(new RebetContainerRegistry().register(Core.Routers.BaseSocketRouter));
 
         return this.container;
     }

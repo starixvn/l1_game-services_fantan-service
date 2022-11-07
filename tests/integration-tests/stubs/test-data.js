@@ -55,7 +55,10 @@ const gameConfig = {
 const rounds = [
     {
         id: 1190119,
-        result: 29,
+        result: {
+            totalBeads: 29,
+            finalBeads: 1,
+        },
         settlementResult: {
             odd: true,
             even: false,
@@ -75,7 +78,10 @@ const rounds = [
     },
     {
         id: 1190118,
-        result: 30,
+        result: {
+            totalBeads: 30,
+            finalBeads: 2,
+        },
         settlementResult: {
             odd: false,
             even: true,
@@ -95,7 +101,10 @@ const rounds = [
     },
     {
         id: 1190117,
-        result: 32,
+        result: {
+            totalBeads: 32,
+            finalBeads: 4,
+        },
         settlementResult: {
             odd: false,
             even: true,
