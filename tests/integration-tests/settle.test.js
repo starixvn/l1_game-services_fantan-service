@@ -16,75 +16,61 @@ export const settleTest = () => {
             return timeout;
         };
 
-        it("should return settled status data", (done) => {
+        it("should return settled status data", async (done) => {
             // Arrange
             const client = new GameClientDriver(socketOptions, initUserSession(normalUser));
-            client.handleSignedInEvent(() => {
-                client.sendInGameEvent();
-            });
-            let receivedRemainingTime = false;
+            await client.handleSignedInEvent();
+            client.sendInGameEvent();
+            const inGameData = await client.handleGameEvent((data) => data.remainingTime);
+
+            setTimeout(async () => {
+                client.emit(eventTypes.bet, { betChoice: "even", amount: 100 });
+
+                // Act
+                const data = await client.handleGameEvent((data) => data.status);
+
+                // Assert
+                expect(data.status.bet).toBeGreaterThan(0);
+                client.close();
+                done();
+            }, getTimeOutToBet(inGameData.remainingTime, gameSettings.durations) * 1000);
+        });
+
+        it("should return settled finish data and hashResult with rawValue", async () => {
+            // Arrange
+            const client = new GameClientDriver(socketOptions, initUserSession(normalUser));
+            await client.handleSignedInEvent();
+            client.sendInGameEvent();
 
             // Act
-            client.on(socketOptions.gameName, (inGameData) => {
-                if (inGameData.remainingTime && !receivedRemainingTime) {
-                    receivedRemainingTime = true;
-                    setTimeout(() => {
-                        client.emit(eventTypes.bet, { betChoice: "even", amount: 100 });
-                    }, getTimeOutToBet(inGameData.remainingTime, gameSettings.durations) * 1000);
-                }
-            });
+            const data = await client.handleGameEvent((data) => data.finish && data.resultHash);
 
             // Assert
-            client.on(socketOptions.gameName, (data) => {
-                if (data.status) {
-                    expect(data.status.bet).toBeGreaterThan(0);
-
-                    client.close();
-                    done();
-                }
-            });
+            expect(data.resultHash.rawValue).not.toBeEmpty();
+            client.close();
         });
 
-        it("should return settled finish data and hashResult with rawValue", (done) => {
+        it("should return resultHash at start placingBet time", async () => {
             // Arrange & Act
             const client = new GameClientDriver(socketOptions, initUserSession(normalUser));
-            client.handleSignedInEvent(() => {
-                client.sendInGameEvent();
-            });
-
-            // Assert
-            client.on(socketOptions.gameName, (data) => {
-                if (data.finish && data.resultHash) {
-                    expect(data.resultHash.rawValue).not.toBeEmpty();
-
-                    client.close();
-                    done();
-                }
-            });
-        });
-
-        it("should return resultHash at start placingBet time", (done) => {
-            // Arrange & Act
-            const client = new GameClientDriver(socketOptions, initUserSession(normalUser));
-
-            // Assert
             let startTime = new Date();
             client.on(socketOptions.gameName, (data) => {
                 if (data.remainingTime && data.remainingTime === gameSettings.durations.wholeRound) {
                     startTime = new Date();
                 }
-
-                if (data.resultHash) {
-                    let endTime = new Date();
-                    expect(data.resultHash.hashValue).not.toBeEmpty();
-                    expect(Math.round((endTime - startTime) / 1000)).toEqual(
-                        gameSettings.durations.wholeRound - gameSettings.durations.placingBets - 1
-                    );
-
-                    client.close();
-                    done();
-                }
             });
+
+            // Act
+            const data = await client.handleGameEvent((data) => data.resultHash);
+
+            // Assert
+            let endTime = new Date();
+            expect(data.resultHash.hashValue).not.toBeEmpty();
+            expect(Math.round((endTime - startTime) / 1000)).toEqual(
+                gameSettings.durations.wholeRound - gameSettings.durations.placingBets - 1
+            );
+
+            client.close();
         });
     });
 };

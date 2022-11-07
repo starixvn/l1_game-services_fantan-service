@@ -4,7 +4,7 @@ import { initUserSession } from "./init-user-session";
 
 export const boostedOddsTest = () => {
     describe("boosted odds", () => {
-        it("should return boosted odds", (done) => {
+        it("should return boosted odds", async () => {
             // Arrange
             const normalUserClientDriver = new GameClientDriver(socketOptions, initUserSession(normalUser));
             const expectedOdds = {
@@ -24,22 +24,18 @@ export const boostedOddsTest = () => {
                 odd: 1.96,
             };
 
+            await normalUserClientDriver.handleSignedInEvent();
+            normalUserClientDriver.sendInGameEvent();
+
             // Act
-            normalUserClientDriver.handleSignedInEvent(() => {
-                normalUserClientDriver.sendInGameEvent();
-            });
+            const data = await normalUserClientDriver.handleGameEvent((data) => data.odds);
 
             // Assert
-            normalUserClientDriver.on(socketOptions.gameName, (data) => {
-                if (data.odds) {
-                    expect(data.odds.values).toEqual(expectedOdds);
-                    normalUserClientDriver.close();
-                    done();
-                }
-            });
+            expect(data.odds.values).toEqual(expectedOdds);
+            normalUserClientDriver.close();
         });
 
-        it("should return original odds", (done) => {
+        it("should return original odds", async () => {
             // Arrange
             const normalUserClientDriver = new GameClientDriver(socketOptions, initUserSession(normalUser));
             const expectedOdds = {
@@ -59,19 +55,15 @@ export const boostedOddsTest = () => {
                 odd: 1.96,
             };
 
+            await normalUserClientDriver.handleSignedInEvent();
+            normalUserClientDriver.sendInGameEvent();
+
             // Act
-            normalUserClientDriver.handleSignedInEvent(() => {
-                normalUserClientDriver.sendInGameEvent();
-            });
+            const data = await normalUserClientDriver.handleGameEvent((data) => data.odds);
 
             // Assert
-            normalUserClientDriver.on(socketOptions.gameName, (data) => {
-                if (data.odds) {
-                    expect(data.odds.values).toEqual(expectedOdds);
-                    normalUserClientDriver.close();
-                    done();
-                }
-            });
+            expect(data.odds.values).toEqual(expectedOdds);
+            normalUserClientDriver.close();
         });
     });
 };
