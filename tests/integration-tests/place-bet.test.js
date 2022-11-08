@@ -16,15 +16,6 @@ export const placeBetTest = () => {
             return timeout;
         };
 
-        const getTimeOutToBetInvalid = (remainingTime, durations) => {
-            let timeout = 0;
-            if (remainingTime >= durations.lockingBet && remainingTime <= durations.placingBets) {
-                timeout = remainingTime - durations.lockingBet + 1;
-            }
-
-            return timeout;
-        };
-
         describe("when place bet in placing bet time", () => {
             it("should return own bet data", async (done) => {
                 // Arrange
@@ -57,18 +48,16 @@ export const placeBetTest = () => {
                 const client = new GameClientDriver(socketOptions, initUserSession(normalUser));
                 await client.handleSignedInEvent();
                 client.sendInGameEvent();
-                const gameData = await client.handleGameEvent((gameData) => gameData.remainingTime);
+                await client.handleGameEvent((gameData) => gameData.epb);
 
-                setTimeout(async () => {
-                    client.emit(eventTypes.bet, { betChoice: "even", amount: 100 });
-                    // Act
-                    const data = await client.handleGameEvent((data) => data.endBet);
+                client.emit(eventTypes.bet, { betChoice: "even", amount: 100 });
+                // Act
+                const data = await client.handleGameEvent((data) => data.endBet);
 
-                    // Assert
-                    expect(data.endBet).toBe(-1);
-                    client.close();
-                    done();
-                }, getTimeOutToBetInvalid(gameData.remainingTime, gameSettings.durations) * 1000);
+                // Assert
+                expect(data.endBet).toBe(-1);
+                client.close();
+                done();
             });
         });
 

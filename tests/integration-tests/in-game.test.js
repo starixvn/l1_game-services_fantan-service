@@ -5,17 +5,6 @@ import gameSettings from "../../src/game-settings";
 
 export const ingameTest = () => {
     describe("when user joins game", () => {
-        const getTimeOutToPlacingBetTime = (remainingTime, durations) => {
-            let timeout = 0;
-            if (remainingTime <= durations.lockingBet) {
-                timeout = durations.wholeRound - durations.placingBets + remainingTime + 4;
-            } else if (remainingTime > durations.placingBets) {
-                timeout = durations.wholeRound - durations.placingBets + 4;
-            }
-
-            return timeout;
-        };
-
         const getTimeOutToSettleTime = (remainingTime, durations) => {
             let timeout = 0;
             if (remainingTime <= durations.placingBets) {
@@ -111,26 +100,19 @@ export const ingameTest = () => {
         });
 
         describe("when join game in placing bet time", () => {
-            it("should return resultHash with hashValue", async (done) => {
+            it("should return resultHash with hashValue", async () => {
                 // Arrange
                 const normalUserClientDriver = new GameClientDriver(socketOptions, initUserSession(normalUser));
-                const gameData = await normalUserClientDriver.handleGameEvent((inGameData) => inGameData?.remainingTime);
-                const timeout = getTimeOutToPlacingBetTime(gameData.remainingTime, gameSettings.durations) * 1000;
+                await normalUserClientDriver.handleGameEvent((inGameData) => inGameData?.spb);
 
-                setTimeout(async () => {
-                    normalUserClientDriver.sendInGameEvent();
+                normalUserClientDriver.sendInGameEvent();
 
-                    // Act
-                    const inGameData = await normalUserClientDriver.handleGameEvent(
-                        (inGameData) => inGameData.gameConfigs && inGameData.resultHash
-                    );
+                // Act
+                const inGameData = await normalUserClientDriver.handleGameEvent((data) => data.gameConfigs && data.resultHash);
 
-                    // Assert
-                    expect(inGameData.resultHash.hashValue).not.toBeEmpty();
-
-                    normalUserClientDriver.close();
-                    done();
-                }, timeout);
+                // Assert
+                expect(inGameData.resultHash.hashValue).not.toBeEmpty();
+                normalUserClientDriver.close();
             });
         });
 

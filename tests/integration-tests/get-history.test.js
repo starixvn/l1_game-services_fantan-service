@@ -4,7 +4,7 @@ import { initUserSession } from "./init-user-session";
 
 export const getHistoryTest = () => {
     describe("when get history", () => {
-        it("should return history", async (done) => {
+        it("should return history", async () => {
             // Arrange
             const client = new GameClientDriver(socketOptions, initUserSession(normalUser));
             const expectedData = [
@@ -92,26 +92,23 @@ export const getHistoryTest = () => {
             client.sendInGameEvent();
             await client.handleGameEvent((data) => data.remainingTime);
 
-            setTimeout(async () => {
-                // Act
-                client.sendGetHistoryEvent();
-                const data = await client.handleGameEvent((data) => data.history);
+            // Act
+            client.sendGetHistoryEvent();
+            const data = await client.handleGameEvent((data) => data.history);
 
-                // Assert
-                const actualBetLogs = data.history.betLogs.map((betLog) => {
-                    delete betLog.result;
-                    delete betLog.settlementResult;
-                    return betLog;
-                });
+            // Assert
+            const actualBetLogs = data.history.betLogs.map((betLog) => {
+                delete betLog.result;
+                delete betLog.settlementResult;
+                return betLog;
+            });
 
-                expect(actualBetLogs).toEqual(expectedData);
-                expect(data.history.total).toBeGreaterThan(0);
-                expect(data.history.page).toBe(1);
-                expect(data.history.pageSize).toBe(8);
+            expect(actualBetLogs).toEqual(expectedData);
+            expect(data.history.total).toBeGreaterThan(0);
+            expect(data.history.page).toBe(1);
+            expect(data.history.pageSize).toBe(8);
 
-                client.close();
-                done();
-            }, 1000);
+            client.close();
         });
     });
 };
