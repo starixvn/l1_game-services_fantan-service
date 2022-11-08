@@ -10,7 +10,7 @@ export default class Definition extends GameDefinition {
             choices = [],
             choicesMapper = {},
             hedgeBetGroups = [],
-            numberOfRoundHistory = 100,
+            numberOfRoundHistory = 102,
             historyPageSize = 8,
         },
         generateResult,
