@@ -1,0 +1,139 @@
+import { Table } from "sc-game-base";
+
+export default class ProcessBetQueue extends Table.Crons.TableProcessBetQueue {
+    constructor({
+        definition,
+        gameData,
+        placeBetPublisher,
+        placeBet,
+        logService,
+        betsRepository,
+        betLogsRepository,
+        userInfosRepository,
+        baseMetrics,
+        rebetProcessor,
+    }) {
+        super({
+            definition,
+            gameData,
+            placeBetPublisher,
+            placeBet,
+            logService,
+            betsRepository,
+            betLogsRepository,
+            userInfosRepository,
+            baseMetrics,
+        });
+
+        this.rebetProcessor = rebetProcessor;
+    }
+
+    decreaseBetTracks(playerName, bet) {
+        if (bet.rebet) {
+            const { lastBet } = bet;
+            Object.entries(lastBet).forEach(([betChoice, amount]) => super.decreaseBetTracks(playerName, { betChoice, amount }));
+        } else {
+            super.decreaseBetTracks(playerName, bet);
+        }
+    }
+
+    async upsertBet(player, roundId, bet, rate) {
+        const configs = this.gameData.gameConfigs;
+        const newBet = {
+            uid: player.UID,
+            name: player.profile.name,
+            time: new Date(),
+            odds: configs.odds,
+            freeBet: bet.freeBet,
+            roundId,
+        };
+        const existingBetFilter = { uid: player.UID, roundId, freeBet: bet.freeBet };
+        let existingBetIncrement = {
+            totalAmount: bet.amount,
+        };
+
+        if (bet.rebet) {
+            existingBetIncrement = this.rebetProcessor.assignAmountToChoice(existingBetIncrement, bet.lastBet);
+        } else {
+            existingBetIncrement[bet.betChoice] = bet.amount;
+        }
+
+        if (player.session) {
+            newBet.siteId = player.session.siteId;
+            newBet.currency = player.session.currencyName;
+            newBet.rate = rate;
+
+            newBet.operatorId = player.session.operatorId;
+            newBet.playerId = player.session.playerId;
+        }
+
+        await this.betsRepository.updateOne(
+            existingBetFilter,
+            { $inc: existingBetIncrement, $setOnInsert: newBet },
+            { upsert: true, setDefaultsOnInsert: true }
+        );
+    }
+
+    adjustTotalBets(player, bet, rate) {
+        if (bet.rebet) {
+            const { lastBet } = bet;
+            Object.entries(lastBet).forEach(([betChoice, amount]) => super.adjustTotalBets(player, { betChoice, amount }, rate));
+        } else {
+            super.adjustTotalBets(player, bet, rate);
+        }
+    }
+
+    adjustOwnBets(playerName, bet) {
+        if (bet.rebet) {
+            const { lastBet } = bet;
+
+            Object.entries(lastBet).forEach(([betChoice, amount]) => super.adjustOwnBets(playerName, { betChoice, amount }));
+        } else {
+            super.adjustOwnBets(playerName, bet);
+        }
+    }
+
+    generatePlacingBetResult(player, balance, bet, rate) {
+        const { amount, freeBet, betChoice } = bet;
+        const { ownBets } = this.gameData.ingame[player.profile.name] || { ownBets: {} };
+
+        const result = {
+            ownBets,
+            endBet: amount,
+            betChoice,
+            freeBet,
+            user: { ...balance },
+            rebet: null,
+        };
+
+        if (this.gameData.players[player.UID]) {
+            this.gameData.players[player.UID].red = balance.red;
+        }
+
+        if (bet.rebet) {
+            result.rebet = this.updateRebetGameDataChips(player, bet, rate);
+        } else {
+            result.ownChip = { betChoice, amount };
+            this.updateGameDataChips(bet, rate);
+        }
+
+        return result;
+    }
+
+    updateRebetGameDataChips(player, bet, rate) {
+        const { chips } = this.gameData.currencyGroupGames.find((x) => x.groupId.toString() === player.session.currencyGroupId);
+
+        const rebetChips = this.rebetProcessor.convertAmountToChipList(bet.lastBet, chips);
+
+        for (const betChoice of Object.keys(rebetChips)) {
+            const chipList = rebetChips[betChoice];
+            for (const chipAmount of Object.keys(chipList)) {
+                for (let index = 0; index < chipList[chipAmount]; index++) {
+                    super.updateGameDataChips({ betChoice, amount: chipAmount }, rate);
+                }
+            }
+        }
+
+        return rebetChips;
+    }
+}

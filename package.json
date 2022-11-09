@@ -28,7 +28,7 @@
         "random-int": "^3.0.0",
         "random-js": "^2.1.0",
         "sc-game-base": "3.2.3",
-        "sc-rebet-mode": "1.0.0-beta.12"
+        "sc-rebet-mode": "1.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.0.0",
@@ -45,7 +45,7 @@
         "jest-junit": "^12.2.0",
         "jest-micro-auto-stub": "^1.0.9",
         "jest-sonar-reporter": "^2.0.0",
-        "sc-game-service-integration-utils": "1.3.6-beta.0",
+        "sc-game-service-integration-utils": "1.3.5",
         "sc-semantic-release": "^1.1.0"
     },
     "husky": {

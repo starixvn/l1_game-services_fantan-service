@@ -4,6 +4,7 @@ import { RebetContainerRegistry } from "sc-rebet-mode";
 import FanTanPlaceBetConsumer from "./consumers/fan-tan-place-bet-consumer";
 import { Bot, GameCron } from "./crons";
 import { Bets, Rounds, TmpBets, Results } from "./models";
+import ProcessBetQueue from "./crons/process-bet-queue";
 
 const { asClass, asValue } = awilix;
 
@@ -31,7 +32,7 @@ export default class ContainerRegistry extends Table.TableContainerRegistry {
         super.registerConsumers();
 
         this.container.register({
-            FanTanPlaceBetConsumer: asClass(FanTanPlaceBetConsumer).singleton(),
+            placeBetConsumer: asClass(FanTanPlaceBetConsumer).singleton(),
         });
     }
 
@@ -41,6 +42,7 @@ export default class ContainerRegistry extends Table.TableContainerRegistry {
         this.container.register({
             bot: asClass(Bot).singleton(),
             gameCron: asClass(GameCron).singleton().proxy(),
+            processBetQueue: asClass(ProcessBetQueue).singleton().proxy(),
         });
     }
 }

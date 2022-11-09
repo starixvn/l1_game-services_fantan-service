@@ -6112,20 +6112,20 @@ sc-game-base@3.2.3:
     socket.io-msgpack-parser "^3.0.1"
     socket.io-prom-metrics "^1.0.3"
 
-sc-game-service-integration-utils@1.3.6-beta.0:
-  version "1.3.6-beta.0"
-  resolved "http://npm.lumigame.com/sc-game-service-integration-utils/-/sc-game-service-integration-utils-1.3.6-beta.0.tgz#9c7cc18d3c1f2e0beec8a5f0d6d47266093c49db"
-  integrity sha512-ZAt4+szuN6gp55ZSOVh3sC7NXsy9R8SJSzi4MD5ltmFiwS6XaheRP8uzmxnKUq3a9p89gj954A6vRThFt2cDQg==
+sc-game-service-integration-utils@1.3.5:
+  version "1.3.5"
+  resolved "http://npm.lumigame.com/sc-game-service-integration-utils/-/sc-game-service-integration-utils-1.3.5.tgz#9bb12d875c25c64dcf022b1fc5754bd8d9824359"
+  integrity sha512-JGhxkNc+BCH8+OyuZLZVllYAqBmclVaiowIfSxERNiSwlA7bdzVoHzJVPCbcXQ4+vSmlj7A2DeXow8Cqq+YUyw==
   dependencies:
     lodash.matches "^4.6.0"
     nock "^13.2.1"
     sc-game-base "3.2.3"
     socket.io-client "^4.4.0"
 
-sc-rebet-mode@1.0.0-beta.12:
-  version "1.0.0-beta.12"
-  resolved "http://npm.lumigame.com/sc-rebet-mode/-/sc-rebet-mode-1.0.0-beta.12.tgz#680b7701828ca283d8c3153bac60fce984c806e2"
-  integrity sha512-N/gZIO28QvYsvL2U1BVwyeoZpHjG68RdkduljiXAkyNtoadLkQvycd63Fb8i9ROziWYSw0ujp0r+/5p4V+kC8Q==
+sc-rebet-mode@1.0.0:
+  version "1.0.0"
+  resolved "http://npm.lumigame.com/sc-rebet-mode/-/sc-rebet-mode-1.0.0.tgz#b0a5232c70e61dc8dbeaaf72c6ed8396e4e0f1f2"
+  integrity sha512-HlDMRSMxC6E/tnO/JfbnivQoh9JGFYbm0ZGklRtfItjpfd4CcTQlpn3wMATAqt+zQSZDEotuu77FGbaLPHoYVA==
   dependencies:
     awilix "^4.3.4"
     chance "^1.1.7"
