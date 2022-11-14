@@ -18,6 +18,7 @@ const bet = {
     chun124: { type: Number, default: 0 },
     chun134: { type: Number, default: 0 },
     chun234: { type: Number, default: 0 },
+    totalAmount: { type: Number, default: 0 },
 
     betwin: { type: Number, default: 0 },
     time: { type: Date },
@@ -36,9 +37,9 @@ const bets = mongoose.model(
     "FanTan_bet",
     new mongoose.Schema({
         ...bet,
-        currency: { type: String, require: true },
-        rate: { type: Number, require: true },
-        partnerId: { type: String, require: true },
+        currency: { type: String, required: true },
+        rate: { type: Number, required: true },
+        operatorId: { type: String, required: true },
     })
 );
 const tmpBets = mongoose.model("FanTan_tmpBet", new mongoose.Schema(bet));

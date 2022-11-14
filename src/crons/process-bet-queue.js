@@ -37,6 +37,36 @@ export default class ProcessBetQueue extends Table.Crons.TableProcessBetQueue {
         }
     }
 
+    async insertBetLog(player, roundId, bet, rate) {
+        let newBetLog = {
+            uid: player.UID,
+            name: player.profile.name,
+            time: new Date(),
+            freeBet: bet.freeBet,
+            roundId,
+            clientSentTime: bet.clientSentTime,
+            receivedTime: bet.receivedTime,
+            rebet: false,
+        };
+
+        if (bet.rebet) {
+            newBetLog.rebet = true;
+            newBetLog = this.rebetProcessor.assignAmountToChoice(newBetLog, bet.lastBet);
+        } else {
+            newBetLog[bet.betChoice] = bet.amount;
+        }
+
+        if (player.session) {
+            newBetLog.siteId = player.session.siteId;
+            newBetLog.currency = player.session.currencyName;
+            newBetLog.rate = rate;
+            newBetLog.operatorId = player.session.operatorId;
+            newBetLog.playerId = player.session.playerId;
+        }
+
+        await this.betLogsRepository.create(newBetLog);
+    }
+
     async upsertBet(player, roundId, bet, rate) {
         const configs = this.gameData.gameConfigs;
         const newBet = {

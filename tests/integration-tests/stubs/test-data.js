@@ -75,6 +75,7 @@ const rounds = [
             chun134: true,
             chun234: false,
         },
+        exchangeRateId: 1,
     },
     {
         id: 1190118,
@@ -98,6 +99,7 @@ const rounds = [
             chun134: false,
             chun234: true,
         },
+        exchangeRateId: 1,
     },
     {
         id: 1190117,
@@ -121,6 +123,7 @@ const rounds = [
             chun134: true,
             chun234: true,
         },
+        exchangeRateId: 1,
     },
 ];
 

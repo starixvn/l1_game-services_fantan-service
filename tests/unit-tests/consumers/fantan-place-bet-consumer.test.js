@@ -1,7 +1,7 @@
 import Chance from "chance";
 import { helpers } from "sc-common";
 import { Core } from "sc-game-base";
-import FanTanPlaceBetConsumer from "../../../src/consumers/fan-tan-place-bet-consumer";
+import FanTanPlaceBetConsumer from "../../../src/consumers/fantan-place-bet-consumer";
 
 describe("composeBettingTimeValidationCriteria tests", () => {
     const playerName = "nhanvat01";

@@ -1,10 +1,9 @@
 import awilix from "awilix";
 import { Table, Core } from "sc-game-base";
 import { RebetContainerRegistry } from "sc-rebet-mode";
-import FanTanPlaceBetConsumer from "./consumers/fan-tan-place-bet-consumer";
-import { Bot, GameCron } from "./crons";
-import { Bets, Rounds, TmpBets, Results } from "./models";
-import ProcessBetQueue from "./crons/process-bet-queue";
+import FanTanPlaceBetConsumer from "./consumers/fantan-place-bet-consumer";
+import { Bot, GameCron, ProcessBetQueue } from "./crons";
+import { Bets, Rounds, TmpBets, Results, BetLogs } from "./models";
 
 const { asClass, asValue } = awilix;
 
@@ -25,6 +24,7 @@ export default class ContainerRegistry extends Table.TableContainerRegistry {
             betsRepository: asValue(Bets),
             tempBetsRepository: asValue(TmpBets),
             resultsRepository: asValue(Results),
+            betLogsRepository: asValue(BetLogs),
         });
     }
 
