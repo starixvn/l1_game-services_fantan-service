@@ -42,8 +42,8 @@ function random8(min, max) {
 }
 
 export const randomModes = {
-    1: [random1, random2, random3, random4, random5],
-    2: [random6],
+    1: [random1, random2, random3],
+    2: [random4, random5, random6],
     3: [random7, random8],
 };
 

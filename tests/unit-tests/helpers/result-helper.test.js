@@ -212,9 +212,9 @@ describe("generateResult tests", () => {
             { randomMode: 1, pickoneIndex: 0 },
             { randomMode: 1, pickoneIndex: 1 },
             { randomMode: 1, pickoneIndex: 2 },
-            { randomMode: 1, pickoneIndex: 3 },
-            { randomMode: 1, pickoneIndex: 4 },
             { randomMode: 2, pickoneIndex: 0 },
+            { randomMode: 2, pickoneIndex: 1 },
+            { randomMode: 2, pickoneIndex: 2 },
             { randomMode: 3, pickoneIndex: 0 },
             { randomMode: 3, pickoneIndex: 1 },
         ];
