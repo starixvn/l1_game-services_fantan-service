@@ -46,6 +46,7 @@ export const getHistoryTest = () => {
                     rate: 1,
                     betLogDetails: [],
                     roundId: 1190119,
+                    totalAmount: 0,
                 },
                 {
                     odd: 0,
@@ -85,6 +86,7 @@ export const getHistoryTest = () => {
                     rate: 1,
                     betLogDetails: [],
                     roundId: 1190119,
+                    totalAmount: 0,
                 },
             ];
 
