@@ -1,5 +1,4 @@
 export default {
-    settlementDuration: 5,
     numberOfBeads: {
         min: 29,
         max: 40,

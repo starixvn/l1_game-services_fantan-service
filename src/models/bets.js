@@ -20,7 +20,6 @@ const bet = {
     chun234: { type: Number, default: 0 },
     totalAmount: { type: Number, default: 0 },
 
-    betwin: { type: Number, default: 0 },
     time: { type: Date },
     odds: { type: Object },
 
@@ -30,7 +29,6 @@ const bet = {
     playerId: { type: Number },
     operatorId: { type: String, required: false },
     roundId: { type: Number, default: 0 },
-    paid: { type: Boolean, default: false },
 };
 
 const bets = mongoose.model(
@@ -40,8 +38,24 @@ const bets = mongoose.model(
         currency: { type: String, required: true },
         rate: { type: Number, required: true },
         operatorId: { type: String, required: true },
+        paid: { type: Boolean, default: false },
+        betwin: { type: Number, default: 0 },
     })
 );
-const tmpBets = mongoose.model("FanTan_tmpBet", new mongoose.Schema(bet));
+const tmpBets = mongoose.model(
+    "FanTan_tmpBet",
+    new mongoose.Schema({ ...bet, betwin: { type: Number, default: 0 }, paid: { type: Boolean, default: false } })
+);
 
-export { bets as Bets, tmpBets as TmpBets };
+const betLogs = mongoose.model(
+    "FanTan_betLogs",
+    new mongoose.Schema({
+        ...bet,
+        rebet: { type: Boolean, default: false },
+        clientSentTime: { type: Date },
+        receivedTime: { type: Date },
+        time: { type: Date, required: true },
+    })
+);
+
+export { bets as Bets, tmpBets as TmpBets, betLogs as BetLogs };

@@ -23,7 +23,7 @@ describe("Result statistic: 100000 times", () => {
 
             const totalRounds = 100000;
             const dragonTails = {};
-            let isEven = false;
+            let winningChoice = "even";
             let continuity = 0;
 
             // Act
@@ -33,22 +33,16 @@ describe("Result statistic: 100000 times", () => {
 
                 Object.keys(statisticResult).forEach((choice) => (statisticResult[choice] += settlementResult[choice] >> 0));
 
-                if (i > 0) {
-                    if (isEven && settlementResult.even) {
-                        continuity++;
-                    } else {
-                        if (!isEven && settlementResult.odd) {
-                            continuity++;
-                        } else {
-                            if (continuity >= 4) {
-                                dragonTails[continuity] = dragonTails[continuity] ?? 0;
-                                dragonTails[continuity] += 1;
-                            }
-                            continuity = 0;
-                        }
+                if (settlementResult[winningChoice]) {
+                    continuity++;
+                } else {
+                    if (continuity >= 4) {
+                        dragonTails[continuity] = dragonTails[continuity] ?? 0;
+                        dragonTails[continuity] += 1;
                     }
+                    continuity = 0;
                 }
-                isEven = settlementResult.even ? true : false;
+                winningChoice = settlementResult.even ? "even" : "odd";
             }
 
             // Assert
