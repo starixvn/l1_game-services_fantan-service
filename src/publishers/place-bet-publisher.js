@@ -7,11 +7,23 @@ export default class PlaceBetPublisher extends Core.BaseEventPublishers.PlaceBet
         const otherUsersPayload = {
             playerId,
             rate,
-            ...payload.ownChip,
             ...payload.user,
-            rebet: payload.rebet,
         };
 
-        this.publishToAllUsersExceptSystem(Constants.Systems.Mobi, playerId, { playerChip: otherUsersPayload });
+        if (payload.rebet) {
+            for (const [betChoice, chips] of Object.entries(payload.rebet)) {
+                for (const [amount, count] of Object.entries(chips)) {
+                    for (let i = 0; i < count; i++) {
+                        this.publishToAllUsersExceptSystem(Constants.Systems.Mobi, playerId, {
+                            playerChip: { ...otherUsersPayload, betChoice, amount },
+                        });
+                    }
+                }
+            }
+        } else {
+            this.publishToAllUsersExceptSystem(Constants.Systems.Mobi, playerId, {
+                playerChip: { ...otherUsersPayload, ...payload.ownChip },
+            });
+        }
     }
 }
