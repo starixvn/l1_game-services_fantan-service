@@ -57,6 +57,7 @@
         "testResultsProcessor": "jest-junit"
     },
     "resolutions": {
-        "sc-base-database": "1.11.0"
+        "sc-base-database": "1.11.0",
+        "sc-game-base": "3.2.6-beta.0"
     }
 }
