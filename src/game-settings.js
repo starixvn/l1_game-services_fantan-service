@@ -6,7 +6,7 @@ export default {
         wholeRound: 50,
         placingBets: 30,
         lockingBet: 5,
-        shakeThePlateDuration: 5,
+        shakeThePlateDuration: 7,
     },
     choices: [
         "even",
