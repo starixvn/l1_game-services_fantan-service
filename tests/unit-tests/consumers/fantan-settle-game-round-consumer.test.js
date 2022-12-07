@@ -162,20 +162,12 @@ describe("FanTanSettleGameRoundConsumer", () => {
                 });
             });
 
-        it("should publish round result to client", async () => {
-            // Arrange
-            const expectedResult = {
-                roundResult: {
-                    roundId: gameData.roundId,
-                    winningPlayers: gameData.winningPlayers,
-                },
-            };
-
+        it("should publish winners to client", async () => {
             // Act
             await consumer.settleBets(settleBetParams);
 
             // Assert
-            expect(roundResultPublisher.publishToAllUsers).toHaveBeenCalledWith(expectedResult);
+            expect(roundResultPublisher.publishWinners).toHaveBeenCalledWith(gameData.roundId, gameData.winningPlayers);
         });
     });
 });

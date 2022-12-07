@@ -4,6 +4,7 @@ import { RebetContainerRegistry } from "sc-rebet-mode";
 import FanTanPlaceBetConsumer from "./consumers/fantan-place-bet-consumer";
 import { Bot, GameCron } from "./crons";
 import { Bets, Rounds, TmpBets, Results, BetLogs } from "./models";
+import RoundResultPublisher from "./publishers/round-result-publisher";
 
 const { asClass, asValue } = awilix;
 
@@ -42,6 +43,14 @@ export default class ContainerRegistry extends Table.TableContainerRegistry {
         this.container.register({
             bot: asClass(Bot).singleton(),
             gameCron: asClass(GameCron).singleton().proxy(),
+        });
+    }
+
+    registerPublishers() {
+        super.registerPublishers();
+
+        this.container.register({
+            roundResultPublisher: asClass(RoundResultPublisher).singleton(),
         });
     }
 }
