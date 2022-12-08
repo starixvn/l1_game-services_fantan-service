@@ -25,6 +25,6 @@ export default class FanTanSettleGameRoundConsumer extends Table.EventConsumers.
             );
         }
 
-        this.roundResultPublisher.publishWinners(this.gameData.roundId, this.gameData.winningPlayers);
+        this.roundResultPublisher.publishWinners(roundId, this.gameData.winningPlayers);
     }
 }

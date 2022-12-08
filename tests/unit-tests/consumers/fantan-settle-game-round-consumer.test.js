@@ -167,7 +167,7 @@ describe("FanTanSettleGameRoundConsumer", () => {
             await consumer.settleBets(settleBetParams);
 
             // Assert
-            expect(roundResultPublisher.publishWinners).toHaveBeenCalledWith(gameData.roundId, gameData.winningPlayers);
+            expect(roundResultPublisher.publishWinners).toHaveBeenCalledWith(settleBetParams.roundId, gameData.winningPlayers);
         });
     });
 });
