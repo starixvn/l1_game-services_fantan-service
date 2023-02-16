@@ -28,8 +28,11 @@
         "random": "^3.0.6",
         "random-int": "^3.0.0",
         "random-js": "^2.1.0",
-        "sc-game-base": "3.2.5",
+        "sc-game-base": "3.3.0",
         "sc-rebet-mode": "1.0.2"
+    },
+    "resolutions": {
+        "sc-game-base": "3.3.0"
     },
     "devDependencies": {
         "@babel/core": "^7.0.0",
