@@ -37,10 +37,14 @@ function random7(min, max) {
     return randomInteger(min, max);
 }
 
+function random8(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min); // NOSONAR
+}
+
 export const randomModes = {
-    1: [random1, random2, random3],
-    2: [random4, random5],
-    3: [random6, random7],
+    1: [random1, random2, random3, random4],
+    2: [random5, random6, random7, random8],
+    3: [random2, random4, random6, random8],
 };
 
 export const generateResult = (randomMode) => {
