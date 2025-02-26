@@ -1,6 +1,6 @@
 import awilix from "awilix";
 import { Table, Core } from "sc-game-base";
-import { FanTanPlaceBetConsumer, FanTanSettleGameRoundConsumer } from "./consumers";
+import { FanTanPlaceBetConsumer } from "./consumers";
 import { Bot, GameCron } from "./crons";
 import { Bets, Rounds, TmpBets, Results, BetLogs } from "./models";
 import RebetContainerRegistry from "./rebet-container-registry";
@@ -33,7 +33,6 @@ export default class ContainerRegistry extends Table.TableContainerRegistry {
 
         this.container.register({
             placeBetConsumer: asClass(FanTanPlaceBetConsumer).singleton(),
-            settleGameRoundConsumer: asClass(FanTanSettleGameRoundConsumer).singleton().proxy(),
         });
     }
 
